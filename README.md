@@ -3,4 +3,5 @@ Debloater, security, performance, and privacy enhancer auto-setup script for a f
 
 ## Required
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope LocalMachine -Force
+
 Run as Admin
