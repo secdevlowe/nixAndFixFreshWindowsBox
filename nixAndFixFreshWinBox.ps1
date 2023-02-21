@@ -701,7 +701,7 @@ $PathToCUGameBar = "HKCU:\SOFTWARE\Microsoft\GameBar"
 Write-Output-Text "Performance Tweaks"
 
 Write-Output -Text "System"
-Write-Caption -Text "Display"
+Write-Output -Text "Display"
 Write-Output -Types "+", $TweakType -Status "Enable Hardware Accelerated GPU Scheduling... (Windows 10 20H1+ - Needs Restart)"
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" -Name "HwSchMode" -Type DWord -Value 2
 
@@ -750,7 +750,7 @@ Write-Output -Types "+", $TweakType -Status "Enabling Hibernate (Boots faster on
 powercfg -Hibernate on
 
 Write-Output -Text "Network & Internet"
-Write-Caption -Text "Proxy"
+Write-Output -Text "Proxy"
 Write-Output -Types "-", $TweakType -Status "Fixing Edge slowdown by NOT Automatically Detecting Settings..."
 # Code from: https://www.reddit.com/r/PowerShell/comments/5iarip/set_proxy_settings_to_automatically_detect/?utm_source=share&utm_medium=web2x&context=3
 $Key = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Connections"
@@ -771,9 +771,9 @@ Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseHoverTime" -Type 
 ForEach ($DesktopRegistryPath in @($PathToUsersControlPanelDesktop, $PathToCUControlPanelDesktop)) {
     <# $DesktopRegistryPath is the path related to all users and current user configuration #>
     If ($DesktopRegistryPath -eq $PathToUsersControlPanelDesktop) {
-        Write-Caption -Text "TO ALL USERS"
+        Write-Output -Text "TO ALL USERS"
     } ElseIf ($DesktopRegistryPath -eq $PathToCUControlPanelDesktop) {
-        Write-Caption -Text "TO CURRENT USER"
+        Write-Output -Text "TO CURRENT USER"
     }
 
     Write-Output -Types "+", $TweakType -Status "Don't prompt user to end tasks on shutdown..."
@@ -844,7 +844,7 @@ Write-Output -Types $EnableStatus[0].Symbol, $TweakType -Status "$($EnableStatus
 Set-ItemProperty -Path "$PathToCUExplorerAdvanced" -Name "ShowSyncProviderNotifications" -Type DWord -Value $Zero
 
 Write-Output -Text "Personalization"
-Write-Caption -Text "Start & Lockscreen"
+Write-Output -Text "Start & Lockscreen"
 Write-Output -Types $EnableStatus[0].Symbol, $TweakType -Status "$($EnableStatus[0].Status) Show me the windows welcome experience after updates..."
 Write-Output -Types $EnableStatus[0].Symbol, $TweakType -Status "$($EnableStatus[0].Status) 'Get fun facts and tips, etc. on lock screen'..."
 
@@ -889,7 +889,7 @@ If (Test-Path "$PathToCUContentDeliveryManager\SuggestedApps") {
 }
 
 Write-Output -Text "Privacy -> Windows Permissions"
-Write-Caption -Text "General"
+Write-Output -Text "General"
 Write-Output -Types $EnableStatus[0].Symbol, $TweakType -Status "$($EnableStatus[0].Status) Let apps use my advertising ID..."
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo" -Name "Enabled" -Type DWord -Value $Zero
 If (!(Test-Path "$PathToLMPoliciesAdvertisingInfo")) {
@@ -900,20 +900,20 @@ Set-ItemProperty -Path "$PathToLMPoliciesAdvertisingInfo" -Name "DisabledByGroup
 Write-Output -Types $EnableStatus[0].Symbol, $TweakType -Status "$($EnableStatus[0].Status) 'Let websites provide locally relevant content by accessing my language list'..."
 Set-ItemProperty -Path "HKCU:\Control Panel\International\User Profile" -Name "HttpAcceptLanguageOptOut" -Type DWord -Value $One
 
-Write-Caption -Text "Speech"
+Write-Output -Text "Speech"
 If (!$Revert) {
     Disable-OnlineSpeechRecognition
 } Else {
     Enable-OnlineSpeechRecognition
 }
 
-Write-Caption -Text "Inking & Typing Personalization"
+Write-Output -Text "Inking & Typing Personalization"
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Personalization\Settings" -Name "AcceptedPrivacyPolicy" -Type DWord -Value $Zero
 Set-ItemProperty -Path "$PathToCUInputPersonalization\TrainedDataStore" -Name "HarvestContacts" -Type DWord -Value $Zero
 Set-ItemProperty -Path "$PathToCUInputPersonalization" -Name "RestrictImplicitInkCollection" -Type DWord -Value $One
 Set-ItemProperty -Path "$PathToCUInputPersonalization" -Name "RestrictImplicitTextCollection" -Type DWord -Value $One
 
-Write-Caption -Text "Diagnostics & Feedback"
+Write-Output -Text "Diagnostics & Feedback"
 If (!$Revert) {
     Disable-Telemetry
 } Else {
@@ -944,7 +944,7 @@ If ((Test-Path "$PathToCUSiufRules\PeriodInNanoSeconds")) {
 }
 Set-ItemProperty -Path "$PathToCUSiufRules" -Name "NumberOfSIUFInPeriod" -Type DWord -Value $Zero
 
-Write-Caption -Text "Activity History"
+Write-Output -Text "Activity History"
 If ($Revert) {
     Enable-ActivityHistory
 } Else {
@@ -952,24 +952,24 @@ If ($Revert) {
 }
 
 Write-Output -Text "Privacy -> Apps Permissions"
-Write-Caption -Text "Location"
+Write-Output -Text "Location"
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location" -Name "Value" -Value "Deny"
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location" -Name "Value" -Value "Deny"
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}" -Name "SensorPermissionState" -Type DWord -Value $Zero
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\lfsvc\Service\Configuration" -Name "EnableStatus" -Type DWord -Value $Zero
 
-Write-Caption -Text "Notifications"
+Write-Output -Text "Notifications"
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userNotificationListener" -Name "Value" -Value "Deny"
 
-Write-Caption -Text "App Diagnostics"
+Write-Output -Text "App Diagnostics"
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics" -Name "Value" -Value "Deny"
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics" -Name "Value" -Value "Deny"
 
-Write-Caption -Text "Account Info Access"
+Write-Output -Text "Account Info Access"
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userAccountInformation" -Name "Value" -Value "Deny"
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userAccountInformation" -Name "Value" -Value "Deny"
 
-Write-Caption -Text "Other Devices"
+Write-Output -Text "Other Devices"
 Write-Output -Types "-", $TweakType -Status "Denying device access..."
 If (!(Test-Path "$PathToCUDeviceAccessGlobal\LooselyCoupled")) {
     New-Item -Path "$PathToCUDeviceAccessGlobal\LooselyCoupled" -Force | Out-Null
@@ -984,11 +984,11 @@ ForEach ($key in (Get-ChildItem "$PathToCUDeviceAccessGlobal")) {
     Set-ItemProperty -Path ("$PathToCUDeviceAccessGlobal\" + $key.PSChildName) -Name "Value" -Value "Deny"
 }
 
-Write-Caption -Text "Background Apps"
+Write-Output -Text "Background Apps"
 Enable-BackgroundAppsToogle
 
 Write-Output -Text "Update & Security"
-Write-Caption -Text "Windows Update"
+Write-Output -Text "Windows Update"
 Write-Output -Types "-", $TweakType -Status "Disabling Automatic Download and Installation of Windows Updates..."
 If (!(Test-Path "$PathToLMPoliciesWindowsUpdate")) {
     New-Item -Path "$PathToLMPoliciesWindowsUpdate" -Force | Out-Null
@@ -1024,7 +1024,7 @@ If (!(Test-Path "$PathToLMDeliveryOptimizationCfg")) {
 # [@] (3 = Local Network and Internet,  99 = Simply Download mode, 100 = Bypass mode)
 Set-ItemProperty -Path "$PathToLMDeliveryOptimizationCfg" -Name "DODownloadMode" -Type DWord -Value $One
 
-Write-Caption -Text "Troubleshooting"
+Write-Output -Text "Troubleshooting"
 Write-Output -Types "+", $TweakType -Status "Enabling Automatic Recommended Troubleshooting, then notify me..."
 If (!(Test-Path "$PathToLMWindowsTroubleshoot")) {
     New-Item -Path "$PathToLMWindowsTroubleshoot" -Force | Out-Null
@@ -1480,7 +1480,7 @@ Write-Output -Types "-", $TweakType -Status "Disabling '- Shortcut' name after c
 Set-ItemProperty -Path "$PathToCUExplorer" -Name "link" -Type Binary -Value ([byte[]](0x00, 0x00, 0x00, 0x00))
 
 Write-Output -Text "Task Bar Tweaks"
-Write-Caption -Text "Task Bar - Windows 10 Compatible"
+Write-Output -Text "Task Bar - Windows 10 Compatible"
 Write-Output -Types $EnableStatus[0].Symbol, $TweakType -Status "$($EnableStatus[0].Status) the 'Search Box' from taskbar..."
 # [@] (0 = Hide completely, 1 = Show icon only, 2 = Show long Search Box)
 Set-ItemProperty -Path "$PathToCUWindowsSearch" -Name "SearchboxTaskbarMode" -Type DWord -Value $Zero
@@ -1531,7 +1531,7 @@ If (!(Test-Path "$PathToLMPoliciesExplorer")) {
 # [@] (0 = Show Meet Now, 1 = Hide Meet Now)
 Set-ItemProperty -Path "$PathToLMPoliciesExplorer" -Name "HideSCAMeetNow" -Type DWord -Value $One
 
-Write-Caption -Text "Task Bar - Windows 11 Compatible"
+Write-Output -Text "Task Bar - Windows 11 Compatible"
 Write-Output -Types $EnableStatus[0].Symbol, $TweakType -Status "$($EnableStatus[0].Status) 'Widgets' icon from taskbar..."
 # [@] (0 = Hide Widgets, 1 = Show Widgets)
 Set-ItemProperty -Path "$PathToCUExplorerAdvanced" -Name "TaskbarDa" -Type DWord -Value $Zero
@@ -1543,17 +1543,17 @@ Write-Output -Types $EnableStatus[0].Symbol, $TweakType -Status "$($EnableStatus
 Set-ItemProperty -Path "$PathToCUExplorerAdvanced" -Name "DisableThumbnailCache" -Type DWord -Value $One
 Set-ItemProperty -Path "$PathToCUExplorerAdvanced" -Name "DisableThumbsDBOnNetworkFolders" -Type DWord -Value $One
 
-Write-Caption -Text "Colors"
+Write-Output -Text "Colors"
 Write-Output -Types "*", $TweakType -Status "Re-Enabling taskbar transparency..."
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "EnableTransparency" -Type DWord -Value 1
 
 Write-Output -Text "System"
-Write-Caption -Text "Multitasking"
+Write-Output -Text "Multitasking"
 Write-Output -Types "-", $TweakType -Status "Disabling Edge multi tabs showing on Alt + Tab..."
 Set-ItemProperty -Path "$PathToCUExplorerAdvanced" -Name "MultiTaskingAltTabFilter" -Type DWord -Value 3
 
 Write-Output -Text "Devices"
-Write-Caption -Text "Bluetooth & other devices"
+Write-Output -Text "Bluetooth & other devices"
 Write-Output -Types $EnableStatus[1].Symbol, $TweakType -Status "$($EnableStatus[1].Status) driver download over metered connections..."
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceSetup" -Name "CostedNetworkPolicy" -Type DWord -Value $One
 
@@ -1568,14 +1568,14 @@ If (!(Test-Path "$PathToCUPoliciesExplorer")) {
 Set-ItemProperty -Path "$PathToCUPoliciesExplorer" -Name "DisableSearchBoxSuggestions" -Type DWord -Value $One
 
 Write-Output -Text "Ease of Access"
-Write-Caption -Text "Keyboard"
+Write-Output -Text "Keyboard"
 Write-Output -Types "-", $TweakType -Status "Disabling Sticky Keys..."
 Set-ItemProperty -Path "$PathToCUAccessibility\StickyKeys" -Name "Flags" -Value "506"
 Set-ItemProperty -Path "$PathToCUAccessibility\Keyboard Response" -Name "Flags" -Value "122"
 Set-ItemProperty -Path "$PathToCUAccessibility\ToggleKeys" -Name "Flags" -Value "58"
 
 Write-Output -Text "Microsoft Edge Policies"
-Write-Caption -Text "Privacy, search and services / Address bar and search"
+Write-Output -Text "Privacy, search and services / Address bar and search"
 Write-Output -Types "*", $TweakType -Status "Show me search and site suggestions using my typed characters..."
 Remove-ItemProperty -Path "$PathToCUPoliciesEdge" -Name "SearchSuggestEnabled" -Force -ErrorAction SilentlyContinue
 
